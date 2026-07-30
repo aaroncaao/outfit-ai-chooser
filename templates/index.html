@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Outfit Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- item catalog rendered by the server, read by app.js -->
+  <script id="options-data" type="application/json">{{ options_json|safe }}</script>
+
+  <div class="page-wrap">
+    <div class="header-row">
+      <div>
+        <h1 class="title">OUTFIT ROULETTE</h1>
+        <p class="subtitle">Lock what you love. Reroll the rest.</p>
+      </div>
+      <div class="header-actions">
+        <button id="save-btn" class="pill-btn gold-btn">
+          <span class="icon" data-icon="bookmark"></span> Save
+        </button>
+        <button id="reroll-all-btn" class="pill-btn coral-btn">
+          <span class="icon" data-icon="shuffle"></span> Reroll all
+        </button>
+      </div>
+    </div>
+
+    <form id="ai-form" class="ai-form">
+      <span class="icon ai-sparkle" data-icon="sparkles"></span>
+      <input id="ai-prompt" type="text" placeholder="Describe a look&hellip; e.g. &ldquo;rainy day errands, still put-together&rdquo;" autocomplete="off" />
+      <button id="ai-submit" type="submit" class="dark-btn">
+        <span id="ai-submit-icon" class="icon" data-icon="sparkles"></span>
+        <span id="ai-submit-label">Generate</span>
+      </button>
+    </form>
+    <p id="ai-error" class="ai-error hidden"></p>
+
+    <div class="content">
+      <div class="left-col" id="slots"></div>
+
+      <div class="right-col">
+        <div class="receipt">
+          <div class="receipt-header">Your Fit &mdash; Receipt</div>
+          <div id="receipt-items"></div>
+          <div class="receipt-total">
+            <span class="total-label">TOTAL</span>
+            <span id="total-amount" class="total-amount">$0.00</span>
+          </div>
+          <p class="receipt-footer">Concept outfit builder &mdash; garment art is illustrated, not photographed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="icon-rail">
+    <button id="library-btn" class="rail-btn cream-btn" aria-label="Saved outfit library">
+      <span class="icon" data-icon="hanger"></span>
+    </button>
+    <button id="add-btn" class="rail-btn coral-btn" aria-label="Add your own clothing piece">
+      <span class="icon" data-icon="plus"></span>
+    </button>
+  </div>
+
+  <!-- library modal -->
+  <div id="library-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title">SAVED OUTFITS</h2>
+        <button class="icon-btn close-modal" data-close="library-modal"><span class="icon" data-icon="x"></span></button>
+      </div>
+      <div id="library-empty" class="empty-msg">Nothing saved yet. Roll a look you love and hit &ldquo;Save.&rdquo;</div>
+      <div id="library-list" class="library-list"></div>
+    </div>
+  </div>
+
+  <!-- add piece modal -->
+  <div id="add-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h2 class="modal-title">ADD A PIECE</h2>
+        <button class="icon-btn close-modal" data-close="add-modal"><span class="icon" data-icon="x"></span></button>
+      </div>
+      <form id="add-form">
+        <label class="field-label">Category</label>
+        <select id="add-cat" class="field-input">
+          <option value="hat">Hat</option>
+          <option value="top">Top</option>
+          <option value="bottom">Bottom</option>
+          <option value="shoes">Shoes</option>
+        </select>
+
+        <label class="field-label">Name</label>
+        <input id="add-name" class="field-input" placeholder="e.g. Grandpa's Flannel" required />
+
+        <div class="field-row">
+          <div class="field-col">
+            <label class="field-label">Store</label>
+            <input id="add-store" class="field-input" placeholder="Your closet" />
+          </div>
+          <div class="field-col narrow">
+            <label class="field-label">Price</label>
+            <input id="add-price" type="number" min="0" class="field-input" placeholder="0" />
+          </div>
+        </div>
+
+        <label class="field-label">Color</label>
+        <input id="add-color" type="color" class="field-color" value="#8A6E4B" />
+
+        <label class="field-label">Description</label>
+        <textarea id="add-desc" class="field-input" rows="2" placeholder="What makes it worth wearing?"></textarea>
+
+        <button type="submit" class="pill-btn coral-btn full-width">Add to closet</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
